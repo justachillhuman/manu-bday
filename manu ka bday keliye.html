@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Manaswi Podili! 🩵✨</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* SKY BLUE THEME & CUSTOM STYLES */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 40%, #f0f9ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .font-handwriting {
+            font-family: 'Great Vibes', 'Dancing Script', cursive;
+        }
+        
+        .font-note {
+            font-family: 'Caveat', cursive;
+        }
+
+        /* Ambient floating elements canvas */
+        #ambientCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glassmorphic Cards with Sky Blue Styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(186, 230, 253, 0.6);
+            box-shadow: 0 20px 40px rgba(2, 132, 199, 0.08);
+        }
+
+        /* Step Transitions */
+        .page-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .page-step.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Shake animation for incorrect passcode */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Cute Gift Box Floating Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+
+        .gift-box-card {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .gift-box-card:hover {
+            transform: translateY(-14px) scale(1.06);
+            filter: drop-shadow(0 20px 25px rgba(2, 132, 199, 0.25));
+        }
+
+        /* VINTAGE SCROLL STYLING */
+        .vintage-scroll-container {
+            background-color: #fbf6ee;
+            background-image: 
+                radial-gradient(#e2d5c3 0.75px, transparent 0.75px),
+                radial-gradient(#e2d5c3 0.75px, #fbf6ee 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            border-top: 24px solid #3b2513;
+            border-bottom: 24px solid #3b2513;
+            box-shadow: 
+                0 0 0 4px #78350f,
+                0 25px 50px -12px rgba(2, 132, 199, 0.25),
+                inset 0 0 100px rgba(180, 130, 80, 0.25);
+            position: relative;
+        }
+
+        /* PRESSED FLOWER VINTAGE PAPER STATIONERY STYLING */
+        .vintage-paper-container {
+            background: #f4ebd9;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15), inset 0 0 60px rgba(180, 140, 90, 0.25);
+            border: 1px solid #e2d3b9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-outer-border {
+            background: #eadeca;
+            box-shadow: inset 0 0 30px rgba(130, 90, 50, 0.15);
+            position: relative;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(224, 242, 254, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-slate-800 flex flex-col justify-between items-center selection:bg-sky-200 selection:text-sky-900">
+
+    <!-- Ambient Sky Blue Background Canvas (Hearts, Stars, Balloons) -->
+    <canvas id="ambientCanvas"></canvas>
+
+    <!-- Header Navigation Container -->
+    <header class="w-full max-w-6xl px-4 py-5 z-10 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl text-sky-500 animate-pulse"><i class="fa-solid fa-cloud-moon"></i> 🩵</span>
+            <span class="font-serif-title font-bold text-xl md:text-2xl text-sky-950 tracking-tight">Manu's Birthday Celebration</span>
+        </div>
+        <div id="topAudioControls" class="hidden items-center space-x-3 bg-white/70 backdrop-blur-md px-4 py-2 rounded-full border border-sky-200 shadow-sm">
+            <button id="bgMusicToggle" class="text-sky-700 hover:text-sky-900 transition text-sm font-medium flex items-center space-x-2">
+                <i id="musicIcon" class="fa-solid fa-music text-sky-500"></i>
+                <span id="musicText">Play Music</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE CONTAINER -->
+    <main class="w-full max-w-5xl px-4 py-4 z-10 flex-grow flex flex-col justify-center items-center">
+
+        <!-- ================= STEP 1: PASSCODE ENTRY ================= -->
+        <section id="step1" class="page-step active flex-col items-center justify-center w-full max-w-md">
+            <div class="glass-card w-full rounded-3xl p-8 text-center flex flex-col items-center border border-sky-200 shadow-xl">
+                
+                <!-- Framed Photo Container -->
+                <div class="relative mb-6 group">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-sky-400 via-sky-200 to-sky-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-white shadow-xl bg-sky-100">
+                        <!-- 💡 USER CUSTOMIZATION: REPLACE IMAGE URL BELOW WITH MANU'S PHOTO -->
+                        <img id="manuPhoto" src="manubbg.jpg.jpg" alt="Manu's Portrait" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="absolute bottom-1 right-2 bg-sky-500 text-white w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                        <i class="fa-solid fa-crown text-xs"></i>
+                    </div>
+                </div>
+
+                <h1 class="font-serif-title text-2xl md:text-3xl font-bold text-sky-950 mb-1">Happy Birthday Manu! 🩵</h1>
+                <p class="text-xs md:text-sm text-sky-700/80 mb-6">Enter your secret passcode to unlock your birthday world.</p>
+
+                <!-- Passcode Input Display -->
+                <div id="passcodeBox" class="w-full flex flex-col items-center space-y-4">
+                    <div class="flex space-x-3 justify-center mb-2">
+                        <input type="password" maxlength="1" class="pin-input w-12 h-14 text-center text-2xl font-bold rounded-2xl border-2 border-sky-300 bg-white/90 focus:border-sky-500 text-sky-800 outline-none transition shadow-sm" readonly>
+                        <input type="password" maxlength="1" class="pin-input w-12 h-14 text-center text-2xl font-bold rounded-2xl border-2 border-sky-300 bg-white/90 focus:border-sky-500 text-sky-800 outline-none transition shadow-sm" readonly>
+                        <input type="password" maxlength="1" class="pin-input w-12 h-14 text-center text-2xl font-bold rounded-2xl border-2 border-sky-300 bg-white/90 focus:border-sky-500 text-sky-800 outline-none transition shadow-sm" readonly>
+                        <input type="password" maxlength="1" class="pin-input w-12 h-14 text-center text-2xl font-bold rounded-2xl border-2 border-sky-300 bg-white/90 focus:border-sky-500 text-sky-800 outline-none transition shadow-sm" readonly>
+                    </div>
+
+                    <!-- Custom On-Screen Keypad -->
+                    <div class="grid grid-cols-3 gap-3 w-full max-w-xs pt-2">
+                        <button onclick="appendPin('1')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">1</button>
+                        <button onclick="appendPin('2')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">2</button>
+                        <button onclick="appendPin('3')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">3</button>
+                        <button onclick="appendPin('4')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">4</button>
+                        <button onclick="appendPin('5')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">5</button>
+                        <button onclick="appendPin('6')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">6</button>
+                        <button onclick="appendPin('7')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">7</button>
+                        <button onclick="appendPin('8')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">8</button>
+                        <button onclick="appendPin('9')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">9</button>
+                        <button onclick="clearPin()" class="keypad-btn py-3 rounded-xl bg-sky-100 hover:bg-sky-200 font-semibold text-xs text-sky-800 shadow-sm active:scale-95 transition flex items-center justify-center">CLEAR</button>
+                        <button onclick="appendPin('0')" class="keypad-btn py-3 rounded-xl bg-white/90 hover:bg-sky-100 font-bold text-lg text-sky-900 shadow-sm border border-sky-100 active:scale-95 transition">0</button>
+                        <button onclick="deletePin()" class="keypad-btn py-3 rounded-xl bg-sky-100 hover:bg-sky-200 font-semibold text-xs text-sky-800 shadow-sm active:scale-95 transition flex items-center justify-center"><i class="fa-solid fa-backspace text-base"></i></button>
+                    </div>
+
+                    <p id="passcodeError" class="text-sky-700 font-semibold text-xs h-4 transition opacity-0">Incorrect code! Hint: 0111 🔑</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= STEP 2: GIFT SELECTION HUB ================= -->
+        <section id="step2" class="page-step flex-col items-center justify-center w-full min-h-[65vh] text-center">
+            
+            <!-- Cute Header Text matching reference style -->
+            <div class="mb-8 md:mb-12">
+                <h2 class="font-handwriting text-5xl md:text-6xl font-bold text-sky-800 mb-2 drop-shadow-sm">Gift for you 🩵</h2>
+                <p class="font-serif-title italic text-sm md:text-base text-sky-600/80 tracking-wide">Click any gift to open</p>
+            </div>
+
+            <!-- Side-by-Side Styled Wrapped Gift Boxes (Matching Pinterest Style) -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16 w-full max-w-2xl px-4">
+                
+                <!-- Gift Box Option 1: 11 Surprise Envelopes -->
+                <div onclick="navigateTo('step3')" class="gift-box-card group cursor-pointer flex flex-col items-center">
+                    <div class="relative w-44 h-44 md:w-52 md:h-52 bg-white/90 rounded-3xl p-6 shadow-xl border-2 border-sky-100 flex flex-col items-center justify-center transition duration-300 animate-float">
+                        <!-- SVG Cute 3D Wrapped Gift Box with Ribbon -->
+                        <svg class="w-32 h-32 text-sky-400 group-hover:scale-110 transition duration-300 drop-shadow-md" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Box Base -->
+                            <rect x="18" y="42" width="64" height="46" rx="6" fill="#7dd3fc"/>
+                            <rect x="18" y="42" width="32" height="46" fill="#38bdf8" opacity="0.3"/>
+                            <!-- Lid -->
+                            <rect x="14" y="32" width="72" height="15" rx="4" fill="#bae6fd"/>
+                            <!-- Vertical Ribbon -->
+                            <rect x="43" y="32" width="14" height="56" fill="#f43f5e"/>
+                            <!-- Horizontal Ribbon on Lid -->
+                            <rect x="14" y="37" width="72" height="6" fill="#f43f5e"/>
+                            <!-- Ribbon Bow -->
+                            <path d="M50 32C42 20 28 22 36 32C44 40 50 32 50 32Z" fill="#fb7185"/>
+                            <path d="M50 32C58 20 72 22 64 32C56 40 50 32 50 32Z" fill="#fb7185"/>
+                            <circle cx="50" cy="32" r="5" fill="#e11d48"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Gift Box Option 2: Vintage Letter Scroll -->
+                <div onclick="navigateTo('step4')" class="gift-box-card group cursor-pointer flex flex-col items-center">
+                    <div class="relative w-44 h-44 md:w-52 md:h-52 bg-white/90 rounded-3xl p-6 shadow-xl border-2 border-sky-100 flex flex-col items-center justify-center transition duration-300 animate-float" style="animation-delay: 1.5s;">
+                        <!-- SVG Cute 3D Wrapped Gift Box with Gold Ribbon -->
+                        <svg class="w-32 h-32 text-sky-400 group-hover:scale-110 transition duration-300 drop-shadow-md" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Box Base -->
+                            <rect x="18" y="42" width="64" height="46" rx="6" fill="#38bdf8"/>
+                            <rect x="18" y="42" width="32" height="46" fill="#0284c7" opacity="0.25"/>
+                            <!-- Lid -->
+                            <rect x="14" y="32" width="72" height="15" rx="4" fill="#7dd3fc"/>
+                            <!-- Vertical Ribbon -->
+                            <rect x="43" y="32" width="14" height="56" fill="#fbbf24"/>
+                            <!-- Horizontal Ribbon on Lid -->
+                            <rect x="14" y="37" width="72" height="6" fill="#fbbf24"/>
+                            <!-- Ribbon Bow -->
+                            <path d="M50 32C42 20 28 22 36 32C44 40 50 32 50 32Z" fill="#f59e0b"/>
+                            <path d="M50 32C58 20 72 22 64 32C56 40 50 32 50 32Z" fill="#f59e0b"/>
+                            <circle cx="50" cy="32" r="5" fill="#d97706"/>
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= STEP 3: 11 SURPRISE ENVELOPES (SCATTERED) ================= -->
+        <section id="step3" class="page-step flex-col items-center w-full">
+            <div class="w-full flex justify-between items-center mb-4">
+                <button onclick="navigateTo('step2')" class="inline-flex items-center text-xs md:text-sm font-semibold text-sky-900 hover:text-sky-600 bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-sky-200 shadow-sm transition">
+                    <i class="fa-solid fa-chevron-left mr-2"></i> Back
+                </button>
+                <span class="text-xs font-semibold text-sky-800 bg-sky-100 px-3 py-1.5 rounded-full border border-sky-200">11 Scattered Wishes</span>
+            </div>
+
+            <!-- Scattered Envelopes Desk Area -->
+            <div id="envelopesDesk" class="relative w-full max-w-5xl min-h-[620px] md:min-h-[550px] my-4 p-4 flex flex-wrap justify-center items-center content-center gap-4 md:gap-6">
+                <!-- Javascript will auto-render the 11 scattered envelopes here -->
+            </div>
+        </section>
+
+
+        <!-- ================= STEP 4: VINTAGE SCROLL LETTER PAGE ================= -->
+        <section id="step4" class="page-step flex-col items-center w-full py-4">
+            <div class="w-full max-w-2xl flex justify-between items-center mb-6">
+                <button onclick="navigateTo('step2')" class="inline-flex items-center text-xs md:text-sm font-semibold text-sky-900 hover:text-sky-600 bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-sky-200 shadow-sm transition">
+                    <i class="fa-solid fa-chevron-left mr-2"></i> Back to Hub
+                </button>
+                <button onclick="window.print()" class="inline-flex items-center text-xs font-semibold text-amber-900 hover:text-amber-950 bg-amber-100 px-3.5 py-1.5 rounded-full border border-amber-300 transition shadow-sm">
+                    <i class="fa-solid fa-print mr-1.5"></i> Save / Print Letter
+                </button>
+            </div>
+
+            <!-- Pressed Flower Vintage Stationery Paper -->
+            <div class="relative w-full max-w-2xl my-4">
+                
+                <!-- Outer Border Paper with Subtle Script & Fiber Texture -->
+                <div class="paper-outer-border p-4 md:p-8 rounded-lg shadow-2xl">
+                    
+                    <!-- Inner Parchment Sheet -->
+                    <article class="vintage-paper-container rounded-sm px-6 py-10 md:px-14 md:py-16 text-amber-950 min-h-[600px] flex flex-col justify-between relative">
+                        
+                        <!-- Pressed Flower Top Right -->
+                        <div class="absolute top-2 right-2 md:top-4 md:right-4 w-28 md:w-36 h-28 md:h-36 pointer-events-none z-10 opacity-90">
+                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M70 75 Q60 55 50 35" stroke="#7a8b6e" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M58 50 Q45 48 40 42" stroke="#7a8b6e" stroke-width="1.5"/>
+                                <!-- Petals -->
+                                <path d="M45 25 C30 10 20 25 35 35 C20 45 35 60 45 45 C55 60 70 45 55 35 C70 25 55 10 45 25 Z" fill="#b197c6" opacity="0.85"/>
+                                <path d="M45 28 C35 15 28 27 38 34 C28 42 38 52 45 42 C52 52 62 42 52 34 C62 27 55 15 45 28 Z" fill="#9d7bb0" opacity="0.9"/>
+                                <circle cx="45" cy="35" r="4" fill="#e6ca65"/>
+                            </svg>
+                        </div>
+
+                        <!-- Pressed Flower Bottom Left -->
+                        <div class="absolute bottom-2 left-2 md:bottom-4 md:left-4 w-32 md:w-44 h-32 md:h-44 pointer-events-none z-10 opacity-90">
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M35 110 Q50 80 70 50" stroke="#4a5d3f" stroke-width="3" stroke-linecap="round"/>
+                                <!-- Leaves -->
+                                <path d="M42 95 C30 90 25 100 35 105 Z" fill="#5c734e"/>
+                                <path d="M48 85 C60 80 65 90 55 95 Z" fill="#5c734e"/>
+                                <path d="M54 73 C40 68 38 78 48 82 Z" fill="#5c734e"/>
+                                <!-- Petals -->
+                                <path d="M70 45 C55 30 45 45 60 55 C45 65 60 80 70 65 C80 80 95 65 80 55 C95 45 80 30 70 45 Z" fill="#b197c6" opacity="0.85"/>
+                                <path d="M70 48 C58 35 50 47 62 54 C52 62 62 72 70 62 C78 72 88 62 78 54 C88 47 80 35 70 48 Z" fill="#8b689e" opacity="0.9"/>
+                                <circle cx="70" cy="55" r="5" fill="#e6ca65"/>
+                            </svg>
+                        </div>
+
+                        <!-- Letter Content Container -->
+                        <div class="relative z-20">
+                            <!-- Letter Header Date -->
+                            <div class="text-right font-serif-title text-xs md:text-sm text-amber-900/70 italic mb-8">
+                                On Your Special Day ✨
+                            </div>
+
+                            <!-- 💡 USER CUSTOMIZATION: REPLACE OR EDIT THE HANDWRITTEN PARAGRAPH TEXT BELOW -->
+                            <div class="space-y-6 font-handwriting text-2xl md:text-3xl text-amber-950 leading-relaxed tracking-wide">
+                                <p>Dearest Manu,</p>
+                                
+                                <p>Happy Birthday! Words often fall short when trying to capture how truly wonderful and bright you make the world around you.</p>
+                                
+                                <p>On your special birthday, I want you to remember how deeply loved, cherished, and appreciated you are. May this brand new chapter bring you endless reasons to smile, cozy moments of peace, and all your biggest dreams fulfilled.</p>
+                                
+                                <p>Thank you for being the amazing, radiant soul that you are.</p>
+                                
+                                <p class="pt-4 text-right">With all my love & warmest wishes,</p>
+                                <p class="text-right font-bold text-3xl md:text-4xl text-sky-900">Always 🩵</p>
+                            </div>
+                        </div>
+
+                        <!-- Wax Seal Detail at Bottom -->
+                        <div class="mt-12 flex justify-end items-center relative z-20">
+                            <div class="w-14 h-14 bg-gradient-to-br from-amber-800 to-amber-950 rounded-full shadow-lg border-2 border-amber-500/50 flex items-center justify-center transform rotate-6">
+                                <div class="w-10 h-10 rounded-full border border-dashed border-amber-300/50 flex items-center justify-center text-amber-200 text-xs font-serif-title font-bold">
+                                    M
+                                </div>
+                            </div>
+                        </div>
+
+                    </article>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-xs text-sky-800/70 font-medium z-10">
+        Made with 🩵 for Manu's Special Day
+    </footer>
+
+    <!-- ================= MODAL DIALOG FOR 11 VIDEO ENVELOPES ================= -->
+    <div id="envelopeModal" class="fixed inset-0 z-50 bg-sky-950/60 backdrop-blur-md hidden justify-center items-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-xl w-full p-6 md:p-8 relative shadow-2xl border border-sky-200 transform scale-95 transition-transform duration-300 flex flex-col items-center">
+            
+            <!-- Modal Close Button -->
+            <button onclick="closeEnvelopeModal()" class="absolute top-4 right-4 w-9 h-9 bg-sky-100 hover:bg-sky-200 hover:text-sky-800 rounded-full flex items-center justify-center text-sky-600 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Envelope Header Badge -->
+            <div id="modalBadge" class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md mb-3 bg-sky-500">
+                <i id="modalIcon" class="fa-solid fa-video"></i>
+            </div>
+
+            <h3 id="modalTitle" class="font-serif-title text-2xl font-bold text-sky-950 text-center mb-1">Envelope Title</h3>
+            <p id="modalText" class="text-xs md:text-sm text-sky-800/80 text-center mb-5 leading-relaxed">Personal birthday wish note...</p>
+
+            <!-- Custom Video Container / Player Box -->
+            <div class="w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 shadow-inner relative mb-4 border border-sky-200">
+                <iframe id="modalVideo" class="w-full h-full border-0" src="" title="Birthday Wish Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <button onclick="closeEnvelopeModal()" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl shadow-md transition">
+                Close Wish
+            </button>
+        </div>
+    </div>
+
+    <!-- Background Audio Element -->
+    <!-- AFTER -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="Sahana Sahana – Raja Saab’S Love (mp3cut.net).mp3" type="audio/mpeg">
+</audio>
+
+
+    <!-- ================= JAVASCRIPT LOGIC & DATA ================= -->
+    <script>
+        /* =========================================================================
+           💡 USER CUSTOMIZATION SECTION: 11 SURPRISE ENVELOPES DATA
+           ========================================================================= */
+        const envelopeData = [
+             { title: "Surprise 1", icon: "fa-heart", color: "bg-sky-500", text: "", video: "niger.mp4" },
+            { title: "Surprise 2", icon: "fa-heart", color: "bg-amber-500", text: "", video: "tanvi.mp4" },
+            { title: "Surprise 3", icon: "fa-heart", color: "bg-blue-500", text: "", video: "yashika.mp4" },
+            { title: "Surprise 4", icon: "fa-heart", color: "bg-teal-500", text: "", video: "potti.mp4" },
+            { title: "Surprise 5", icon: "fa-heart", color: "bg-cyan-600", text: "", video: "alekhya akka.mp4" },
+            { title: "Surprise 7", icon: "fa-heart", color: "bg-amber-600", text: "", video: "alekhya akka husband.mp4" },
+        { title: "Surprise 8", icon: "fa-heart", color: "bg-sky-600", text: "", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { title: "Surprise 9", icon: "fa-heart", color: "bg-blue-600", text: "", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { title: "Surprise 10", icon: "fa-heart", color: "bg-teal-600", text: "", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+            { title: "Surprise 11", icon: "fa-heart", color: "bg-sky-700", text: "", video: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+    ]
+
+        // Rotation angles for scattering envelopes naturally
+        const rotations = [-12, 8, -6, 14, -10, 5, -15, 11, -7, 12, -4];
+
+        /* =========================================================================
+           PASSCODE LOGIC & STATE
+           ========================================================================= */
+        const CORRECT_PIN = "0111";
+        let currentPin = "";
+
+        function appendPin(digit) {
+            if (currentPin.length < 4) {
+                currentPin += digit;
+                updatePinUI();
+            }
+
+            if (currentPin.length === 4) {
+                setTimeout(verifyPin, 180);
+            }
+        }
+
+        function deletePin() {
+            currentPin = currentPin.slice(0, -1);
+            updatePinUI();
+        }
+
+        function clearPin() {
+            currentPin = "";
+            updatePinUI();
+        }
+
+        function updatePinUI() {
+            const inputs = document.querySelectorAll('.pin-input');
+            inputs.forEach((input, index) => {
+                input.value = currentPin[index] ? '•' : '';
+            });
+            document.getElementById('passcodeError').classList.add('opacity-0');
+        }
+
+        // Render Scattered Envelopes Layout
+        function renderEnvelopes() {
+            const desk = document.getElementById('envelopesDesk');
+            if (!desk) return;
+
+            desk.innerHTML = envelopeData.map((env, idx) => {
+                const rot = rotations[idx % rotations.length];
+                const zIdx = Math.floor(Math.random() * 10) + 1;
+                return `
+                <div onclick="openEnvelopeModal(${idx})" 
+                     style="transform: rotate(${rot}deg); z-index: ${zIdx};"
+                     class="gift-box-card glass-card w-36 sm:w-44 h-48 sm:h-52 rounded-2xl p-4 cursor-pointer flex flex-col items-center justify-between text-center border-2 border-sky-200/80 shadow-md hover:shadow-2xl hover:z-50 hover:scale-110 hover:rotate-0 transition-all duration-300 relative group">
+                    <div class="absolute top-2 right-2 text-[10px] font-bold text-sky-400">#${idx + 1}</div>
+                    <div class="w-12 h-12 ${env.color} text-white rounded-2xl flex items-center justify-center text-xl shadow-md mt-2 group-hover:scale-110 transition">
+                        <i class="fa-solid ${env.icon}"></i>
+                    </div>
+                    <div class="my-auto">
+                        <h4 class="font-serif-title font-bold text-sky-950 text-xs sm:text-sm mb-1 line-clamp-1">${env.title}</h4>
+                        <p class="text-[10px] text-sky-800/70 line-clamp-2 leading-snug">Open Wish</p>
+                    </div>
+                    <div class="w-full pt-2 border-t border-sky-100 flex items-center justify-center text-sky-500 text-xs">
+                        <i class="fa-solid fa-envelope-open-text mr-1"></i>
+                        <span class="text-[10px] font-semibold">Envelope</span>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // Passcode Validation & Celebration Confetti Explosion
+        function verifyPin() {
+            if (currentPin === CORRECT_PIN) {
+                
+                // 💥 COLORFUL CONFETTI EXPLOSION BURST!
+                triggerCelebrationConfetti();
+
+                // Background Music Autoplay attempt
+                const bgMusic = document.getElementById('bgMusic');
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(() => {
+                    console.log("Audio play blocked by browser. User can play manually.");
+                });
+                
+                // Display Header Audio Controls
+                document.getElementById('topAudioControls').classList.remove('hidden');
+                document.getElementById('topAudioControls').classList.add('flex');
+
+                // Smoothly Transition to Step 2
+                setTimeout(() => {
+                    navigateTo('step2');
+                }, 700);
+
+            } else {
+                const passcodeBox = document.getElementById('passcodeBox');
+                const passcodeError = document.getElementById('passcodeError');
+                passcodeBox.classList.add('shake');
+                passcodeError.classList.remove('opacity-0');
+                
+                setTimeout(() => {
+                    passcodeBox.classList.remove('shake');
+                    clearPin();
+                }, 450);
+            }
+        }
+
+        // Multi-stage confetti celebration burst
+        function triggerCelebrationConfetti() {
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+                colors: ['#38bdf8', '#0284c7', '#fbbf24']
+            });
+            fire(0.2, {
+                spread: 60,
+                colors: ['#e0f2fe', '#f43f5e', '#38bdf8']
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                colors: ['#bae6fd', '#fbbf24', '#38bdf8']
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
+        }
+
+        // Navigation Router
+        function navigateTo(stepId) {
+            document.querySelectorAll('.page-step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            const target = document.getElementById(stepId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Envelope Modal Controls
+        function openEnvelopeModal(index) {
+            const data = envelopeData[index];
+            if (!data) return;
+
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalText').innerText = data.text;
+            document.getElementById('modalIcon').className = `fa-solid ${data.icon}`;
+            document.getElementById('modalBadge').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md mb-3 ${data.color}`;
+            
+            const iframe = document.getElementById('modalVideo');
+            iframe.src = data.video.includes('?') ? `${data.video}&autoplay=1` : `${data.video}?autoplay=1`;
+
+            const modal = document.getElementById('envelopeModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+                modal.querySelector('div').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeEnvelopeModal() {
+            const modal = document.getElementById('envelopeModal');
+            modal.querySelector('div').classList.remove('scale-100');
+            modal.querySelector('div').classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('modalVideo').src = '';
+            }, 300);
+        }
+
+        // Audio Controls Setup
+        function setupMusicToggle() {
+            const btn = document.getElementById('bgMusicToggle');
+            const audio = document.getElementById('bgMusic');
+
+            btn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    updateMusicUI(true);
+                } else {
+                    audio.pause();
+                    updateMusicUI(false);
+                }
+            });
+        }
+
+        function updateMusicUI(isPlaying) {
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            if (isPlaying) {
+                icon.className = "fa-solid fa-volume-high text-sky-600 animate-bounce";
+                text.innerText = "Music On";
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-slate-400";
+                text.innerText = "Music Off";
+            }
+        }
+
+        // Ambient Canvas Background Particles (Floating Hearts, Stars, Balloons)
+        function initAmbientCanvas() {
+            const canvas = document.getElementById('ambientCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 30 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 10 + 6,
+                speedY: Math.random() * 0.7 + 0.2,
+                opacity: Math.random() * 0.5 + 0.2,
+                type: ['heart', 'star', 'balloon'][Math.floor(Math.random() * 3)],
+                color: ['#0284c7', '#38bdf8', '#bae6fd', '#f43f5e', '#fbbf24'][Math.floor(Math.random() * 5)]
+            }));
+
+            function drawShape(p) {
+                ctx.save();
+                ctx.globalAlpha = p.opacity;
+                ctx.fillStyle = p.color;
+
+                if (p.type === 'heart') {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.bezierCurveTo(p.x - p.size / 2, p.y - p.size / 2, p.x - p.size, p.y + p.size / 3, p.x, p.y + p.size);
+                    ctx.bezierCurveTo(p.x + p.size, p.y + p.size / 3, p.x + p.size / 2, p.y - p.size / 2, p.x, p.y);
+                    ctx.fill();
+                } else if (p.type === 'star') {
+                    ctx.beginPath();
+                    for (let i = 0; i < 5; i++) {
+                        ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * p.size + p.x, -Math.sin((18 + i * 72) * Math.PI / 180) * p.size + p.y);
+                        ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * (p.size / 2) + p.x, -Math.sin((54 + i * 72) * Math.PI / 180) * (p.size / 2) + p.y);
+                    }
+                    ctx.fill();
+                } else {
+                    // Balloon
+                    ctx.beginPath();
+                    ctx.ellipse(p.x, p.y, p.size * 0.8, p.size, 0, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y + p.size);
+                    ctx.lineTo(p.x, p.y + p.size + 8);
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    p.x += Math.sin(p.y * 0.015) * 0.4;
+                    if (p.y < -30) {
+                        p.y = canvas.height + 30;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    drawShape(p);
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Initialize script components on load
+        window.onload = function() {
+            renderEnvelopes();
+            setupMusicToggle();
+            initAmbientCanvas();
+        };
+    </script>
+</body>
+</html>
